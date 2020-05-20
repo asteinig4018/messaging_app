@@ -1,2 +1,5 @@
 env/
 .vscode/
+.sass-cache/
+__pycache__/
+static/css/style.css.map

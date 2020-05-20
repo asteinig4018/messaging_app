@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block channels %}
+    <a href="#">General</a>
+{% endblock %}
+
+{% block messages %}
+    {% for message in messages %}
+        <p>{{ message.sender }} - {{ message.timestamp }} : {{ message.content }} </p>
+    {% endfor %}
+{% endblock %}
