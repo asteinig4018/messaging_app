@@ -9,6 +9,16 @@ class Message:
         self.timestamp = datetime.now()
         self.time_print = str(self.timestamp.strftime("%b %d %H:%M:%S"))
 
+    def get_dict(self):
+        self.var_dictionary = {
+            "sender" : self.sender,
+            "channel" : self.channel,
+            "timestamp" : self.time_print,
+            "content" : self.content
+        }
+        return self.var_dictionary
+
+
     
 class Channel:
 
@@ -28,7 +38,7 @@ class channel_list:
         self.channel_names = list()
         self.channels = list()
 
-    def append(self, channel):
+    def add(self, channel):
         self.channel_names.append(channel.name)
         self.channels.append(channel)
 
@@ -38,3 +48,18 @@ class channel_list:
 
     def add_message_to_channel(self, chn_name, message):
         self.channels[self.get_channel_index_by_name(chn_name)].add_message(message)
+
+    def get_dictionary(self):
+        self.dictionary = {}
+        self.dictionary["names"] = self.channel_names
+        self.dictionary["length"] = len(self.channel_names)
+        json_list = list()
+        for channel in self.channels:
+            message_json_list = list()
+            for message in channel.messages:
+                message_json_list.append(message.get_dict())
+            json_list.append(message_json_list)
+
+        self.dictionary["messages"] = json_list
+
+        return self.dictionary
