@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded',() => {
 
         document.getElementById('send_btn').onclick = () => {
             const message_text = document.getElementById('message_text').value
+            document.getElementById('message_text').value = '';
             socket.emit('send_message',{
                 'sender': localStorage.getItem('display_name'), 
                 'content': message_text, 
@@ -30,13 +31,12 @@ document.addEventListener('DOMContentLoaded',() => {
     socket.on('announce_message', data => {
         let msg_area = document.createElement('div');
         let current_channel = document.getElementById('channel_name').innerText;
+        document.getElementById('messages').innerHTML= "";
         for(var i = 0; i < data.num_channels; i++){
             var item;
-            console.log(i)
             for (item of data.messages[0]){
                 let msg_text = document.createElement('p');
-                msg_text.innerHTML = item.sender + " - " + item.timestamp + " : " + item.content;
-                console.log()
+                msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
                 msg_area.appendChild(msg_text)
             }
         }
