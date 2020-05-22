@@ -26,3 +26,11 @@ def messaged(data):
     new_message = Message(data["sender"],data["content"],data["channel"])
     channels.add_message_to_channel(data["channel"],new_message)
     emit("announce_message", channels.get_dictionary(), broadcast=True)
+
+@socketio.on("new_channel")
+def new_channel(data):
+    print(str(data))
+    channel_name = data["new_channel_name"]
+    new_chn = Channel(channel_name)
+    #Probably should do a check to see if it already exists here
+    channels.add(new_chn)

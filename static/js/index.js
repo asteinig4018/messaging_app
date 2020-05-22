@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded',() => {
                 'content': message_text, 
                 'channel': document.getElementById('channel_name').innerText });
         };
+
+        document.getElementById('new_channel').onclick = () =>{
+            new_channel_name = prompt("Enter new channel name: ");
+            socket.emit('new_channel', {
+                'channel_name': new_channel_name
+            });
+        };
     });
 
     socket.on('announce_message', data => {
