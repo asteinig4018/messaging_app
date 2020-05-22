@@ -1,39 +1,26 @@
-from flask import Flask, render_template
+#import requests
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
-from datetime import datetime
+from message_channel import Channel, Message, channel_list
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-channels = list()
-
+channels = channel_list()
+gen_chn = Channel("general")
+channels.append(gen_chn)
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+@app.route("/send", methods=["POST"])
+def send():
+    pass
 
+@socketio.on("send_message")
+def messaged(data):
+    new_message = Message(data["sender"],data["content"],data["channel"])
 
-class Message:
-
-    def __init__(self,sender,content,channel):
-        self.sender = sender
-        self.content = content
-        self.channel = channel
-        self.timestamp = datetime.now()
-        self.time_print = str(self.timestamp.strftime("%b %d %H:%M:%S"))
-
-    
-
-
-class Channel:
-
-    def __init__(self,name):
-        self.name = name
-        self.messages = list()
-
-    def add_message(self,message):
-        self.messages.append(message)
-        #delete oldest message if more than 100 messages
-        if(len(self.messages) > 100):
-            self.messages.pop(0)
+    emit("announce_message", {}, broadcast=True)
