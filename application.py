@@ -22,6 +22,7 @@ def send():
 #manage sockets
 @socketio.on("send_message")
 def messaged(data):
+    print(str(data))
     new_message = Message(data["sender"],data["content"],data["channel"])
     channels.add_message_to_channel(data["channel"],new_message)
     emit("announce_message", channels.get_dictionary(), broadcast=True)

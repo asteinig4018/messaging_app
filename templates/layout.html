@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
         <script src="{{ url_for('static',filename='js/index.js') }}"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
         <title>*Creative Messenger platform name*</title>
     </head>
     <body>
@@ -28,9 +29,7 @@
                         <h5 class="sidebar-heading d-flex align-items-center">
                             Current Channel
                         </h5>
-                        <p id="channel_name"> 
-                            General 
-                        </p>
+                        <p id="channel_name">general</p>
                         <h5 class="sidebar-heading d-flex align-items-center">
                             Channels
                         </h5>
@@ -42,6 +41,7 @@
                     <!--Message Area-->
                         <p>hello</p>
                         {% block messages %}
+
                         {% endblock %}
                     
                 </div>

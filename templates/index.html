@@ -2,10 +2,16 @@
 
 {% block channels %}
     <a href="#">General</a>
+    <button>Create New</button>
 {% endblock %}
 
 {% block messages %}
-    {% for message in messages %}
+    <div id="messages">
+        
+
+    </div>
+
+    <!--{% for message in messages %}
         <p>{{ message.sender }} - {{ message.timestamp }} : {{ message.content }} </p>
-    {% endfor %}
+    {% endfor %}-->
 {% endblock %}
