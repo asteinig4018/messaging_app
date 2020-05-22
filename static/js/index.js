@@ -27,4 +27,17 @@ document.addEventListener('DOMContentLoaded',() => {
         };
     });
 
+    socket.on('announce_message', data => {
+        let msg_area = document.createElement('div');
+        let current_channel = document.getElementById('channel_name').value;
+        for(var i = 0; i < data.num_channels; i++){
+            var item;
+            for (item of data.messages[0]){
+                let msg_text = document.createElement('p');
+                msg_text.innerHTML = item.sender + " - " + item.timestamp + " : " + item.content;
+                msg_area.appendChild(msg_text)
+            }
+        }
+    });
+
 });

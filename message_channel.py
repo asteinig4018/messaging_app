@@ -52,7 +52,7 @@ class channel_list:
     def get_dictionary(self):
         self.dictionary = {}
         self.dictionary["names"] = self.channel_names
-        self.dictionary["length"] = len(self.channel_names)
+        self.dictionary["num_channels"] = len(self.channel_names)
         json_list = list()
         for channel in self.channels:
             message_json_list = list()

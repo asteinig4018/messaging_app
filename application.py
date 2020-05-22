@@ -9,7 +9,7 @@ socketio = SocketIO(app)
 
 channels = channel_list()
 gen_chn = Channel("general")
-channels.append(gen_chn)
+channels.add(gen_chn)
 
 @app.route("/")
 def index():
@@ -19,8 +19,9 @@ def index():
 def send():
     pass
 
+#manage sockets
 @socketio.on("send_message")
 def messaged(data):
     new_message = Message(data["sender"],data["content"],data["channel"])
-
-    emit("announce_message", {}, broadcast=True)
+    channels.add_message_to_channel(data["channel"],new_message)
+    emit("announce_message", channels.get_dictionary(), broadcast=True)
