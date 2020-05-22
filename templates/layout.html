@@ -21,6 +21,17 @@
                     <!--Sidebar-->
                     <div class="sidebar-sticky">
                         <h5 class="sidebar-heading d-flex align-items-center">
+                            Display Name
+                        </h5>
+                        <p id="display_name">  
+                        </p>
+                        <h5 class="sidebar-heading d-flex align-items-center">
+                            Current Channel
+                        </h5>
+                        <p id="channel_name"> 
+                            General 
+                        </p>
+                        <h5 class="sidebar-heading d-flex align-items-center">
                             Channels
                         </h5>
                         {% block channels %}
@@ -36,9 +47,9 @@
                 </div>
                 <!--Message Send Area-->
                 <nav class="navbar navbar-dark fixed-bottom bg-dark col-md-10 ml-sm-auto col-lg-10">
-                        <input class="form-control form-control-dark w-200 col-8" type="text" placeholder="Message" style="width:200%">
+                        <input class="form-control form-control-dark w-200 col-8" type="text" placeholder="Message" style="width:200%" id="message_text">
                         <div class="col-2" style="transform: translateX(-70%);">
-                            <button>Send</button>
+                            <button id="send_btn">Send</button>
                     </div>    
                 </nav>
             </div>
