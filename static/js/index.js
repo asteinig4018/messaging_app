@@ -38,12 +38,15 @@ document.addEventListener('DOMContentLoaded',() => {
     socket.on('announce_message', data => {
         let msg_area = document.createElement('div');
         let current_channel = document.getElementById('channel_name').innerText;
+        //clear messages
         document.getElementById('messages').innerHTML= "";
         for(var i = 0; i < data.num_channels; i++){
             var item;
+            //if index corresonds to current channel
             if(data.names[i] == current_channel){
                 for (item of data.messages[0]){
                     let msg_text = document.createElement('p');
+                    //this bold tag only works in firefox
                     msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
                     msg_area.appendChild(msg_text);
                 }
@@ -59,6 +62,8 @@ document.addEventListener('DOMContentLoaded',() => {
         for(var i = 0; i < data.num_channels; i++){
             let chn_name = document.createElement('a');
             chn_name.innerHTML = "#"+data.names[i];
+            chn_name.href = "#";
+            chn_name.setAttribute("style","display:block;")
             chn_list.appendChild(chn_name);
         }
     });
