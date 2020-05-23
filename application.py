@@ -13,11 +13,17 @@ channels.add(gen_chn)
 
 @app.route("/")
 def index():
+    print("rmsg")
     return render_template("index.html")
 
-@app.route("/send", methods=["POST"])
-def send():
-    pass
+@app.route("/messages", methods=["GET"])
+def messages():
+    print("rchn")
+    return channels.get_dictionary()
+
+@app.route("/channels", methods=["GET"])
+def get_channels():
+    return channels.get_channel_names_dict()
 
 #manage sockets
 @socketio.on("send_message")
