@@ -43,8 +43,12 @@ class channel_list:
         self.channels.append(channel)
 
     def get_channel_index_by_name(self, name):
-        num_index =self.channel_names.index(name)
-        return num_index
+        try:
+            num_index =self.channel_names.index(name)
+        except ValueError:
+            return -1
+        else:
+            return num_index
 
     def add_message_to_channel(self, chn_name, message):
         self.channels[self.get_channel_index_by_name(chn_name)].add_message(message)
@@ -63,3 +67,9 @@ class channel_list:
         self.dictionary["messages"] = json_list
 
         return self.dictionary
+
+    def get_channel_names_dict(self):
+        self.chn_dict = {}
+        self.chn_dict["names"] = self.channel_names
+        self.chn_dict["num_channels"] = len(self.channel_names)
+        return self.chn_dict

@@ -30,7 +30,10 @@ def messaged(data):
 @socketio.on("new_channel")
 def new_channel(data):
     print(str(data))
-    channel_name = data["new_channel_name"]
-    new_chn = Channel(channel_name)
-    #Probably should do a check to see if it already exists here
-    channels.add(new_chn)
+    #extract
+    channel_name = data["channel_name"]
+    #check if channel exists
+    if channels.get_channel_index_by_name(channel_name) == -1:
+        new_chn = Channel(channel_name)
+        channels.add(new_chn)
+        emit("channel_created", channels.get_channel_names_dict(), broadcast=True)

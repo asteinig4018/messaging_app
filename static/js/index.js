@@ -41,13 +41,26 @@ document.addEventListener('DOMContentLoaded',() => {
         document.getElementById('messages').innerHTML= "";
         for(var i = 0; i < data.num_channels; i++){
             var item;
-            for (item of data.messages[0]){
-                let msg_text = document.createElement('p');
-                msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
-                msg_area.appendChild(msg_text)
+            if(data.names[i] == current_channel){
+                for (item of data.messages[0]){
+                    let msg_text = document.createElement('p');
+                    msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
+                    msg_area.appendChild(msg_text);
+                }
             }
         }
         document.getElementById('messages').appendChild(msg_area);
+    });
+
+    socket.on('channel_created', data => {
+        let chn_list = document.getElementById('channel_list');
+        //clear list
+        document.getElementById('channel_list').innerHTML="";
+        for(var i = 0; i < data.num_channels; i++){
+            let chn_name = document.createElement('a');
+            chn_name.innerHTML = "#"+data.names[i];
+            chn_list.appendChild(chn_name);
+        }
     });
 
 });
