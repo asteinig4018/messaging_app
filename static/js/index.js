@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded',() => {
     //1. show display name
     document.querySelector('#display_name').innerHTML = localStorage.getItem('display_name');
 
-    //2. show channels
+    //2. show messages
     fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
         .then(response => response.json())
         .then(data => {
             display_messages(data);
         });
 
-    //3. show messages
+    //3. show channels
     fetch(location.protocol + "//" + document.domain + ":" + location.port + "/channels")
         .then(response => response.json())
         .then(data => {
@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded',() => {
         };
     });
 
+    //receive emits
+
     socket.on('announce_message', data => {
         display_messages(data);
     });
@@ -63,7 +65,22 @@ document.addEventListener('DOMContentLoaded',() => {
 
 });
 
+    //channel change
+function change_channel(name){
 
+    //console.log("clicked");
+    //console.log(name);
+    document.getElementById('channel_name').innerText = name;
+
+    //request channel messages
+    fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
+        .then(response => response.json())
+        .then(data => {
+            display_messages(data);
+    });
+
+    return false;
+}
 
 function display_messages(data){
     let msg_area = document.createElement('div');
@@ -74,7 +91,8 @@ function display_messages(data){
                 var item;
                 //if index corresonds to current channel
                 if(data.names[i] == current_channel){
-                    for (item of data.messages[0]){
+                    //console.log(current_channel);
+                    for (item of data.messages[i]){
                         let msg_text = document.createElement('p');
                         //this bold tag only works in firefox
                         msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
@@ -93,7 +111,10 @@ function display_channels(data){
             let chn_name = document.createElement('a');
             chn_name.innerHTML = "#"+data.names[i];
             chn_name.href = "#";
-            chn_name.setAttribute("style","display:block;")
+            chn_name.setAttribute("style","display:block;");
+            chn_name.setAttribute("data-channel",data.names[i]);
+            chn_name.setAttribute("class","chn_name");
+            chn_name.setAttribute("onclick", "change_channel('"+data.names[i]+"'); return false;");
             chn_list.appendChild(chn_name);
         }
 }
