@@ -1,40 +1,41 @@
-if(!localStorage.getItem('display_name')){
-    //get display name from user
-    let display_name = "";
-    while(display_name == ""){
-        display_name = prompt("Enter a display name: ");
-    }
-
-    localStorage.setItem('display_name',display_name);
-}
+//global variable socket
+var socket;
 
 
 document.addEventListener('DOMContentLoaded',() => {
     //on load:
-    //1. show display name
-    document.querySelector('#display_name').innerHTML = localStorage.getItem('display_name');
 
-    //2. show messages
-    fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
-        .then(response => response.json())
-        .then(data => {
-            display_messages(data, false);
-        });
-
-    //3. show channels
-    fetch(location.protocol + "//" + document.domain + ":" + location.port + "/channels")
-        .then(response => response.json())
-        .then(data => {
-            //console.log("requested channels");
-            display_channels(data);
-            //console.log(data);
-        });
-
-
-    //connect to websocket
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    //1. connect to websocket
+    socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     socket.on('connect', () => {
+
+        //2. new user setup
+
+        if(!localStorage.getItem('display_name')){
+            //get display name from user
+            let display_name = "";
+            while(display_name == ""){
+                display_name = prompt("Enter a display name: ");
+            }
+    
+            localStorage.setItem('display_name',display_name);
+    
+            let in_channels = ["general"];
+            localStorage.setItem('in_channels', JSON.stringify(in_channels));
+    
+            //announce
+            socket.emit('new_joined', {
+                'user' : localStorage.getItem('display_name'),
+                'channel' : "general"
+            });
+        }
+
+        //3. show display name
+        document.querySelector('#display_name').innerHTML = localStorage.getItem('display_name');
+        
+
+        // 4. Listen for buttons
 
         document.getElementById('send_btn').onclick = () => {
             const message_text = document.getElementById('message_text').value
@@ -52,6 +53,25 @@ document.addEventListener('DOMContentLoaded',() => {
             });
         };
     });
+
+
+    
+
+    //5. show messages
+    fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
+        .then(response => response.json())
+        .then(data => {
+            display_messages(data, false);
+        });
+
+    //6. show channels
+    fetch(location.protocol + "//" + document.domain + ":" + location.port + "/channels")
+        .then(response => response.json())
+        .then(data => {
+            //console.log("requested channels");
+            display_channels(data);
+            //console.log(data);
+        });
 
     //receive emits
 
@@ -71,6 +91,21 @@ function change_channel(name){
     let cur_channel = document.getElementById('channel_name').innerText;
 
     document.getElementById('channel_name').innerText = name;
+
+    //check if visited
+    let visited = JSON.parse(localStorage.getItem('in_channels'));
+
+    if(!visited.includes(name)){
+        //announce
+        socket.emit('new_joined', {
+            'user' : localStorage.getItem('display_name'),
+            'channel' : name
+        });
+        //add to list
+        
+        visited.push(name);
+        localStorage.setItem('in_channels', JSON.stringify(visited));
+    }
 
     //request channel messages
     fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")

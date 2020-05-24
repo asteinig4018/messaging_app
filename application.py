@@ -43,3 +43,13 @@ def new_channel(data):
         new_chn = Channel(channel_name)
         channels.add(new_chn)
         emit("channel_created", channels.get_channel_names_dict(), broadcast=True)
+
+@socketio.on("new_joined")
+def user_joined(data):
+    user = data["user"]
+    joined_channel = data["channel"]
+    announce_str = str(user) + " has joined #" + str(joined_channel)
+    print(announce_str)
+    new_message = Message(announce_str, ")", joined_channel)
+    channels.add_message_to_channel(joined_channel, new_message)
+    emit("announce_message", channels.get_dictionary(), broadcast=True)
