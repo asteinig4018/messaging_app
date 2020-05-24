@@ -3,3 +3,4 @@ env/
 .sass-cache/
 __pycache__/
 static/css/style.css.map
+env.sh
