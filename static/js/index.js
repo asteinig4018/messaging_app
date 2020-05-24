@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded',() => {
     fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
         .then(response => response.json())
         .then(data => {
-            display_messages(data);
+            display_messages(data, false);
         });
 
     //3. show channels
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded',() => {
     //receive emits
 
     socket.on('announce_message', data => {
-        display_messages(data);
+        display_messages(data, false);
     });
 
     socket.on('channel_created', data => {
@@ -68,40 +68,52 @@ document.addEventListener('DOMContentLoaded',() => {
     //channel change
 function change_channel(name){
 
-    //console.log("clicked");
-    //console.log(name);
+    let cur_channel = document.getElementById('channel_name').innerText;
+
     document.getElementById('channel_name').innerText = name;
 
     //request channel messages
     fetch(location.protocol + "//" + document.domain + ":" + location.port + "/messages")
         .then(response => response.json())
         .then(data => {
-            display_messages(data);
+            display_messages(data, true);
     });
+
+    //unbold channel switched to
+    const el1 = document.querySelector("#channel-"+name);
+    el1.setAttribute("style","display:block; font-weight:normal;");
 
     return false;
 }
 
-function display_messages(data){
+function display_messages(data, chn_switch){
     let msg_area = document.createElement('div');
-            let current_channel = document.getElementById('channel_name').innerText;
-            //clear messages
-            document.getElementById('messages').innerHTML= "";
-            for(var i = 0; i < data.num_channels; i++){
-                var item;
-                //if index corresonds to current channel
-                if(data.names[i] == current_channel){
-                    //console.log(current_channel);
-                    for (item of data.messages[i]){
-                        let msg_text = document.createElement('p');
-                        //this bold tag only works in firefox
-                        msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
-                        msg_area.appendChild(msg_text);
-                    }
-                }
+    let current_channel = document.getElementById('channel_name').innerText;
+    //clear messages
+    document.getElementById('messages').innerHTML= "";
+    for(var i = 0; i < data.num_channels; i++){
+        var item;
+        //if index corresonds to current channel
+        if(data.names[i] == current_channel){
+
+
+            //console.log(current_channel);
+            for (item of data.messages[i]){
+                let msg_text = document.createElement('p');
+                //this bold tag only works in firefox
+                msg_text.innerHTML = "<b>" + item.sender +"</b>"+ " - " + item.timestamp + " : " + item.content;
+                msg_area.appendChild(msg_text);
             }
-            document.getElementById('messages').appendChild(msg_area);
         }
+        else if (data.names[i] == data.most_recent_channel && !chn_switch){
+            //if channel is not selected, bold name to indicate new message
+            const element = document.querySelector("#channel-"+data.names[i]);
+            console.log(element.innerText);
+            element.setAttribute("style","display:block; font-weight:bold;");
+        }
+    }
+    document.getElementById('messages').appendChild(msg_area);
+}
 
 function display_channels(data){
     let chn_list = document.getElementById('channel_list');
@@ -112,8 +124,7 @@ function display_channels(data){
             chn_name.innerHTML = "#"+data.names[i];
             chn_name.href = "#";
             chn_name.setAttribute("style","display:block;");
-            chn_name.setAttribute("data-channel",data.names[i]);
-            chn_name.setAttribute("class","chn_name");
+            chn_name.setAttribute("id","channel-"+data.names[i]);
             chn_name.setAttribute("onclick", "change_channel('"+data.names[i]+"'); return false;");
             chn_list.appendChild(chn_name);
         }

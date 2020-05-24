@@ -7,7 +7,7 @@ class Message:
         self.content = content
         self.channel = channel
         self.timestamp = datetime.now()
-        self.time_print = str(self.timestamp.strftime("%b %d %H:%M:%S"))
+        self.time_print = str(self.timestamp.strftime("%b %d %H:%M "))
 
     def get_dict(self):
         self.var_dictionary = {
@@ -37,6 +37,7 @@ class channel_list:
     def __init__(self):
         self.channel_names = list()
         self.channels = list()
+        self.last_msg_channel = "general"
 
     def add(self, channel):
         self.channel_names.append(channel.name)
@@ -52,6 +53,7 @@ class channel_list:
 
     def add_message_to_channel(self, chn_name, message):
         self.channels[self.get_channel_index_by_name(chn_name)].add_message(message)
+        self.last_msg_channel = str(chn_name)
 
     def get_dictionary(self):
         self.dictionary = {}
@@ -65,6 +67,7 @@ class channel_list:
             json_list.append(message_json_list)
 
         self.dictionary["messages"] = json_list
+        self.dictionary["most_recent_channel"] = self.last_msg_channel
 
         return self.dictionary
 
