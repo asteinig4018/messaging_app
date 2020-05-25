@@ -9,6 +9,8 @@ This project is a simple messageing app based on slack that utilizes ajax to dis
 * Channels with messages the user has not yet read will become bold
 * The last 100 messages will be stored in each channel 
 
+<img src="demo/img/bob_in_events.JPG" width=70%> 
+
 ## Technologies Used
 
 * Flask 1.1.2
@@ -35,7 +37,7 @@ As a flask app, this is very straightforward to run. Make sure you ```export FLA
 flask run
 ```
 
-Use private or incognito windows to create seperate users.
+You must use seperate browsers to test this locally. In my testing, Chrome and Mozilla both store local data in the same spot, even when private or incognito. 
 
 
 ## Future Potential Improvements

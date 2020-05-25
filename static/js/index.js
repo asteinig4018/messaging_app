@@ -95,8 +95,11 @@ function change_channel(name){
     //check if visited
     let visited = JSON.parse(localStorage.getItem('in_channels'));
 
+    console.log(visited);
+
     if(!visited.includes(name)){
         //announce
+        console.log(name+"joined by"+localStorage.getItem('display_name'))
         socket.emit('new_joined', {
             'user' : localStorage.getItem('display_name'),
             'channel' : name
