@@ -3,7 +3,6 @@ import unittest
 from message_channel import Message, Channel, channel_list
 from datetime import datetime
 
-#from selenium import webdriver
 import os
 import pathlib
 
@@ -75,7 +74,7 @@ class Tests(unittest.TestCase):
     def tet_channel_list_dne(self):
         chnlist = channel_list()
         self.assertEqual(chnlist.get_channel_index_by_name("test"),-1)
-        
+
 
 
 if __name__ == "__main__":
