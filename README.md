@@ -2,6 +2,10 @@
 
 This project is a simple messageing app based on slack that utilizes ajax to display messages real-time to all users. 
 
+### Build Status
+
+[![Build Status](https://travis-ci.org/asteinig4018/messaging_app.svg?branch=master)](https://travis-ci.org/asteinig4018/messaging_app)
+
 ## Features
 
 * Users can join or create channels
